@@ -13,8 +13,8 @@
   --color-accent-dim: #8a723a;
   --color-line: #35342a;
 
-  --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
-  --font-body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Alegreya Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Alegreya Sans", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 
   --container: 1180px;
@@ -58,37 +58,24 @@ a:focus-visible, button:focus-visible {
 }
 
 /* ============================================
-   Aperture signature mark
+   Brand logo
    ============================================ */
-.aperture {
-  --size: 34px;
-  width: var(--size);
-  height: var(--size);
-  flex: none;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 0deg,
-    var(--color-accent) 0deg 40deg, transparent 40deg 60deg,
-    var(--color-accent) 60deg 100deg, transparent 100deg 120deg,
-    var(--color-accent) 120deg 160deg, transparent 160deg 180deg,
-    var(--color-accent) 180deg 220deg, transparent 220deg 240deg,
-    var(--color-accent) 240deg 280deg, transparent 280deg 300deg,
-    var(--color-accent) 300deg 340deg, transparent 340deg 360deg
-  );
-  -webkit-mask-image: radial-gradient(circle, transparent 29%, black 31%);
-  mask-image: radial-gradient(circle, transparent 29%, black 31%);
+.brand-logo {
+  height: 30px;
+  width: auto;
+  display: block;
   transition: transform 0.5s cubic-bezier(.2,.8,.2,1);
 }
-a.brand:hover .aperture,
-.aperture--spin {
-  transform: rotate(52deg) scale(0.88);
+a.brand:hover .brand-logo {
+  transform: rotate(-6deg) scale(1.06);
 }
-.aperture--ghost {
+.brand-logo--ghost {
   position: absolute;
-  --size: 640px;
+  height: 420px;
+  width: auto;
   opacity: 0.05;
-  top: -180px;
-  right: -160px;
+  top: -80px;
+  right: -60px;
   pointer-events: none;
 }
 
@@ -571,6 +558,76 @@ a.frame-caption:hover { color: var(--color-accent); }
 }
 .field input:focus, .field textarea:focus { outline: none; border-color: var(--color-accent); }
 .form-note { font-size: 12.5px; color: var(--color-fg-faint); }
+
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.footer-links .icon-link { padding: 2px 0; }
+
+/* ============================================
+   Gallery preview (homepage)
+   ============================================ */
+.gallery-preview {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  background: var(--color-bg-alt);
+}
+.gallery-preview-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.gallery-preview-slide.is-active { opacity: 1; z-index: 1; }
+.gallery-preview-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.gallery-preview-caption {
+  position: absolute;
+  z-index: 2;
+  bottom: 18px;
+  left: 18px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-fg);
+  background: rgba(20, 20, 15, 0.72);
+  padding: 7px 12px;
+}
+.gallery-preview-caption:hover { color: var(--color-accent); }
+.gallery-preview-dots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 18px;
+}
+.gallery-preview-dots button {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--color-fg-faint);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.gallery-preview-dots button.is-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
 
 /* ============================================
    CTA band

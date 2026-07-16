@@ -1,4 +1,4 @@
-# Fischer Optix — Website
+# fischer.optix — Website
 
 Statische Multi-Page-Website (HTML/CSS/JS, kein Build-Schritt nötig).
 
