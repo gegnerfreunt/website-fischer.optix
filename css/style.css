@@ -279,6 +279,7 @@ section { padding: 56px 0; }
 
 .genre-card {
   position: relative;
+  overflow: hidden;
   border: 1px solid var(--color-line);
   background: var(--color-bg-alt);
   padding: 22px 16px;
@@ -289,8 +290,30 @@ section { padding: 56px 0; }
   transition: border-color 0.25s ease, transform 0.25s ease;
 }
 .genre-card:hover { border-color: var(--color-accent); transform: translateY(-3px); }
+.genre-card .name,
+.genre-card .spec-tag { position: relative; z-index: 2; }
 .genre-card .name { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; }
 .genre-card .spec-tag { font-size: 10.5px; }
+
+/* Hover image preview layer */
+.genre-card-media {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: var(--color-bg-alt);
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.genre-card-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(20,20,15,0.86) 0%, rgba(20,20,15,0.45) 45%, rgba(20,20,15,0.55) 100%);
+}
+.genre-card.is-previewing .genre-card-media { opacity: 1; }
 
 /* ============================================
    Placeholder frame (contact-sheet register marks)
@@ -565,11 +588,12 @@ a.frame-caption:hover { color: var(--color-accent); }
   gap: 8px;
 }
 .icon {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   flex-shrink: 0;
 }
 .footer-links .icon-link { padding: 2px 0; }
+.footer-links .icon { width: 14px; height: 14px; }
 
 /* ============================================
    Gallery preview (homepage)

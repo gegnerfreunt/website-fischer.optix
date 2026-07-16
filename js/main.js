@@ -1,5 +1,72 @@
 // FISCHER OPTIX — site scripts
 document.addEventListener("DOMContentLoaded", function () {
+  // Homepage genre cards: hover image preview with random no-repeat cycling
+  var genreCards = document.querySelectorAll(".genre-card[data-preview]");
+  genreCards.forEach(function (card) {
+    var media = card.querySelector(".genre-card-media");
+    var images = [];
+    try { images = JSON.parse(card.getAttribute("data-preview")) || []; } catch (e) { images = []; }
+    if (!media || !images.length) return;
+
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var dwellTimer = null;
+    var cycleTimer = null;
+    var order = [];
+    var orderPos = 0;
+    var preloaded = false;
+
+    function preload() {
+      if (preloaded) return;
+      preloaded = true;
+      images.forEach(function (src) { var i = new Image(); i.src = src; });
+    }
+    function shuffle(arr) {
+      var a = arr.slice();
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+    function setImage(src) {
+      media.style.backgroundImage = 'url("' + src + '")';
+    }
+    function enter() {
+      preload();
+      card.classList.add("is-previewing");
+      // Show first image immediately
+      setImage(images[0]);
+      if (reduceMotion || images.length < 2) return;
+      // After a dwell, begin cycling the remaining images in random order (no repeats)
+      dwellTimer = setTimeout(function () {
+        // Build a shuffled order of the images excluding the one already shown first
+        var rest = images.slice(1);
+        order = shuffle(rest);
+        orderPos = 0;
+        cycleTimer = setInterval(function () {
+          if (orderPos >= order.length) {
+            // Every image has been shown once — hold on the last frame
+            clearInterval(cycleTimer);
+            cycleTimer = null;
+            return;
+          }
+          setImage(order[orderPos]);
+          orderPos++;
+        }, 900);
+      }, 700);
+    }
+    function leave() {
+      if (dwellTimer) { clearTimeout(dwellTimer); dwellTimer = null; }
+      if (cycleTimer) { clearInterval(cycleTimer); cycleTimer = null; }
+      card.classList.remove("is-previewing");
+    }
+
+    card.addEventListener("mouseenter", enter);
+    card.addEventListener("mouseleave", leave);
+    // Touch/keyboard: reset any preview state if focus moves away
+    card.addEventListener("blur", leave, true);
+  });
+
   // Homepage gallery preview: auto-rotating slides
   var previewSlides = document.querySelectorAll(".gallery-preview-slide");
   var previewDots = document.querySelectorAll(".gallery-preview-dots button");
