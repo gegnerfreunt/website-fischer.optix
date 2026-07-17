@@ -67,42 +67,6 @@ document.addEventListener("DOMContentLoaded", function () {
     card.addEventListener("blur", leave, true);
   });
 
-  // Homepage gallery preview: auto-rotating slides
-  var previewSlides = document.querySelectorAll(".gallery-preview-slide");
-  var previewDots = document.querySelectorAll(".gallery-preview-dots button");
-  if (previewSlides.length) {
-    var current = 0;
-    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var timer = null;
-
-    function showSlide(index) {
-      previewSlides.forEach(function (s, i) { s.classList.toggle("is-active", i === index); });
-      previewDots.forEach(function (d, i) { d.classList.toggle("is-active", i === index); });
-      current = index;
-    }
-    function next() { showSlide((current + 1) % previewSlides.length); }
-    function startAuto() {
-      if (reduceMotion) return;
-      stopAuto();
-      timer = setInterval(next, 4200);
-    }
-    function stopAuto() { if (timer) clearInterval(timer); }
-
-    previewDots.forEach(function (dot, i) {
-      dot.addEventListener("click", function () {
-        showSlide(i);
-        startAuto();
-      });
-    });
-
-    var previewEl = document.querySelector(".gallery-preview");
-    if (previewEl) {
-      previewEl.addEventListener("mouseenter", stopAuto);
-      previewEl.addEventListener("mouseleave", startAuto);
-    }
-    startAuto();
-  }
-
   // Mobile nav toggle
   var toggle = document.querySelector(".nav-toggle");
   var nav = document.querySelector(".site-nav");
