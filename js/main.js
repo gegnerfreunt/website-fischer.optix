@@ -46,6 +46,32 @@
     });
   }
 
+  /* Hintergrund-Wortmark (Startseite): fährt fix mit und blendet am Ende des weißen Bereichs aus.
+     Ein unsichtbarer Sentinel am Anfang des farbigen Abschnitts steuert den Fade über
+     IntersectionObserver: je weiter er ins Bild rückt, desto transparenter das Wortmark. */
+  var bgMark = document.querySelector(".bg-wordmark");
+  var fadeTarget = document.querySelector(".statement") || document.querySelector(".site-footer");
+  if (bgMark && fadeTarget && "IntersectionObserver" in window) {
+    var baseOpacity = 0.4;
+    var sentinel = document.createElement("div");
+    sentinel.style.cssText =
+      "position:absolute;top:0;left:0;width:1px;height:60vh;pointer-events:none;visibility:hidden;";
+    if (!fadeTarget.style.position) fadeTarget.style.position = "relative";
+    fadeTarget.appendChild(sentinel);
+
+    var steps = [];
+    for (var s = 0; s <= 20; s++) steps.push(s / 20);
+
+    var markIo = new IntersectionObserver(
+      function (entries) {
+        var ratio = entries[0].isIntersecting ? entries[0].intersectionRatio : (entries[0].boundingClientRect.top < 0 ? 1 : 0);
+        bgMark.style.opacity = (baseOpacity * (1 - ratio)).toFixed(3);
+      },
+      { threshold: steps }
+    );
+    markIo.observe(sentinel);
+  }
+
   /* Lightbox */
   var frames = Array.prototype.slice.call(document.querySelectorAll("button.frame"));
   if (!frames.length) return;
